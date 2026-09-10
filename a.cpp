@@ -2,7 +2,8 @@
 using namespace std;
 
 using ll = long long;
-
+using db = double;
+// using sint = __int128;
 #define pb push_back
 #define psf push_front
 #define popb pop_back
@@ -11,9 +12,12 @@ using ll = long long;
 #define rall(x) x.rbegin(), x.rend()
 typedef pair <int, int> pi;
 typedef pair <ll, ll> pl;
+typedef pair <double, double> pd;
 typedef vector <string> vs;
 typedef vector <int> vi;
 typedef vector <ll> vl;
+typedef vector <double> vd;
+typedef vector <vd> vvd;
 typedef vector <bool> vb;
 typedef vector <vi> vvi;
 typedef vector <vl> vvl;
@@ -46,13 +50,13 @@ ll inv(ll a, ll m){
     return r;
 }
 
-ll find(ll a, vl & p){
+int find(int a, vi & p){
     if (a == p[a]) return a;
     p[a] = find(p[a], p);
     return p[a];
 }
 
-void uni(ll a, ll b, vl & r, vl & p){
+void uni(int a, int b, vi & r, vi & p){
     a = find(a, p), b = find(b, p);
     if (a == b) return ;
     if (r[b] > r[a]) swap(a, b);
@@ -66,21 +70,24 @@ int mxsgt(int i, int l, int r, int a, int b, vi & sgt){
     return max(mxsgt(i * 2, l, r, a, (a + b)/2, sgt), mxsgt(i * 2 + 1, l, r, (a + b + 1)/2, b, sgt));
 }
 
+int mnsgt(int i, int l, int r, int a, int b, vl & sgt){
+    if (l <= a && b <= r) return sgt[i];
+    if (b < l || r < a) return 1e9;
+    return min(mnsgt(i * 2, l, r, a, (a + b)/2, sgt), mnsgt(i * 2 + 1, l, r, (a + b + 1)/2, b, sgt));
+}
+
 ll smsgt(int i, int l, int r, int a, int b, vl & sgt){
     if (l <= a && b <= r) return sgt[i];
     if (b < l || r < a) return 0;
     return smsgt(i * 2, l, r, a, (a + b)/2, sgt) + smsgt(i * 2 + 1, l, r, (a + b + 1)/2, b, sgt);
 }
 
-// ll mx = 2e5, m = 998244353;
+// ll mx = 1e6 + 1, m = 998244353;
 // vl f(mx, 1), invf(mx, 1);
 
 void solve(){
-    // int a, b;
-    // cin >> a >> b;
-    // cout << a + b << "\n";
+    //
 }
-
 
 int main(){
     ios_base::sync_with_stdio(false);
