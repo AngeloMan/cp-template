@@ -82,8 +82,8 @@ ll smsgt(int i, int l, int r, int a, int b, vl & sgt){
     return smsgt(i * 2, l, r, a, (a + b)/2, sgt) + smsgt(i * 2 + 1, l, r, (a + b + 1)/2, b, sgt);
 }
 
-// ll mx = 1e6 + 1, m = 998244353;
-// vl f(mx, 1), invf(mx, 1);
+// ll mx = 1e6, m = 998244353;
+// vl f(mx + 1, 1), invf(mx + 1, 1);
 
 void solve(){
     //
