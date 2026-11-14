@@ -3,7 +3,6 @@ using namespace std;
 
 using ll = long long;
 using db = double;
-// using sint = __int128;
 #define pb push_back
 #define psf push_front
 #define popb pop_back
@@ -40,6 +39,10 @@ ll gcd(ll a, ll b){
     return gcd(b, a % b);
 }
 
+ll lcm(ll a, ll b){
+    return (a * b)/gcd(a, b);
+}
+
 ll inv(ll a, ll m){
     ll r = 1, b = m - 2, z = 1, k = a;
     while (z <= b){
@@ -64,15 +67,15 @@ void uni(int a, int b, vi & r, vi & p){
     p[b] = a;
 }
 
-int mxsgt(int i, int l, int r, int a, int b, vi & sgt){
+ll mxsgt(ll i, ll l, ll r, ll a, ll b, vl & sgt){
     if (l <= a && b <= r) return sgt[i];
-    if (b < l || r < a) return -1e9;
+    if (b < l || r < a) return -1e17;
     return max(mxsgt(i * 2, l, r, a, (a + b)/2, sgt), mxsgt(i * 2 + 1, l, r, (a + b + 1)/2, b, sgt));
 }
 
-int mnsgt(int i, int l, int r, int a, int b, vl & sgt){
+ll mnsgt(ll i, ll l, ll r, ll a, ll b, vl & sgt){
     if (l <= a && b <= r) return sgt[i];
-    if (b < l || r < a) return 1e9;
+    if (b < l || r < a) return 1e17;
     return min(mnsgt(i * 2, l, r, a, (a + b)/2, sgt), mnsgt(i * 2 + 1, l, r, (a + b + 1)/2, b, sgt));
 }
 
@@ -82,8 +85,37 @@ ll smsgt(int i, int l, int r, int a, int b, vl & sgt){
     return smsgt(i * 2, l, r, a, (a + b)/2, sgt) + smsgt(i * 2 + 1, l, r, (a + b + 1)/2, b, sgt);
 }
 
-// ll mx = 1e6, m = 998244353;
+ll prodsgt(int i, int l, int r, int a, int b, vl & sgt, ll md){
+    if (l <= a && b <= r) return sgt[i];
+    if (b < l || r < a) return 1;
+    return (prodsgt(i * 2, l, r, a, (a + b)/2, sgt, md) * prodsgt(i * 2 + 1, l, r, (a + b + 1)/2, b, sgt, md))%md;
+}
+
+void addtrie(int i, int j, int m, string & s, vvi & trie){
+    if (i == m) {
+        trie[j][27]++;
+        return;
+    }
+    int k = int(s[i] - 'a');
+    if (!trie[j][k]){
+        trie[j][k] = int(trie.size());
+        trie.pb(vi (28, 0));
+    }
+    addtrie(i + 1, trie[j][k], m, s, trie);
+}
+
+int cnttrie(int i, int j, int m, string & s, vvi & trie){
+    if (i == m) return trie[j][27];
+    int k = int(s[i] - 'a');
+    if (!trie[j][k]) return ll(0);
+    return cnttrie(i + 1, trie[j][k], m, s, trie);
+}
+
+// ll mx = 1e6, md = 1e9 + 7;
 // vl f(mx + 1, 1), invf(mx + 1, 1);
+// ll comb(ll a, ll b){
+//     return (f[a] * ((invf(b) * invf(a - b))%md))%md 
+// }
 
 void solve(){
     //
@@ -93,9 +125,9 @@ int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     int t = 1;
-    // for (int i = 2; i <= mx; i++) f[i] = (f[i - 1] * i)%m;
-    // invf[mx] = inv(f[mx], m);
-    // for (int i = mx - 1; i; i--) invf[i] = ((i + 1) * invf[i + 1])%m;
+    // for (int i = 2; i <= mx; i++) f[i] = (f[i - 1] * i)%md;
+    // invf[mx] = inv(f[mx], md);
+    // for (int i = mx - 1; i; i--) invf[i] = ((i + 1) * invf[i + 1])%md;
     cin >> t;
     while (t--) solve();
 }
