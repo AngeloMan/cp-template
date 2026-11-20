@@ -91,6 +91,25 @@ ll prodsgt(int i, int l, int r, int a, int b, vl & sgt, ll md){
     return (prodsgt(i * 2, l, r, a, (a + b)/2, sgt, md) * prodsgt(i * 2 + 1, l, r, (a + b + 1)/2, b, sgt, md))%md;
 }
 
+vi z_function(string s) {
+    int n = s.size();
+    vector<int> z(n);
+    int l = 0, r = 0;
+    for(int i = 1; i < n; i++) {
+        if(i < r) {
+            z[i] = min(r - i, z[i - l]);
+        }
+        while(i + z[i] < n && s[z[i]] == s[i + z[i]]) {
+            z[i]++;
+        }
+        if(i + z[i] > r) {
+            l = i;
+            r = i + z[i];
+        }
+    }
+    return z;
+}
+
 void addtrie(int i, int j, int m, string & s, vvi & trie){
     if (i == m) {
         trie[j][26]++;
@@ -135,6 +154,19 @@ void buildfac(ll & mx, ll & md, vl & f, vl & invf){
     for (int i = mx - 1; i; i--) invf[i] = ((i + 1) * invf[i + 1])%md;
 }
 
+// int mx = 1e7 + 1;
+//vi pm, sv(mx, 1);
+
+void buildprimes(int & mx, vi & sv, vi & pm){
+    sv[0] = sv[1] = 0;
+    for (int i = 2; i * i < mx; i++){
+        if (sv[i]){
+            pm.pb(i);
+            for (int j = i * i; j < mx; j += i) sv[j] = 0;
+        }
+    }
+}
+
 void solve(){
     //
 }
@@ -144,6 +176,7 @@ int main(){
     cin.tie(nullptr);
     int t = 1;
     //buildfac(mx, md, f, invf);
+    //buildprimes(mx, sv, pm);
     cin >> t;
     while (t--) solve();
 }
