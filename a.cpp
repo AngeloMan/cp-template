@@ -40,7 +40,7 @@ ll gcd(ll a, ll b){
 }
 
 ll lcm(ll a, ll b){
-    return (a * b)/gcd(a, b);
+    return a * (b/gcd(a, b));
 }
 
 ll inv(ll a, ll m){
@@ -93,29 +93,47 @@ ll prodsgt(int i, int l, int r, int a, int b, vl & sgt, ll md){
 
 void addtrie(int i, int j, int m, string & s, vvi & trie){
     if (i == m) {
-        trie[j][27]++;
+        trie[j][26]++;
         return;
     }
     int k = int(s[i] - 'a');
     if (!trie[j][k]){
         trie[j][k] = int(trie.size());
-        trie.pb(vi (28, 0));
+        trie.pb(vi (27, 0));
     }
     addtrie(i + 1, trie[j][k], m, s, trie);
 }
 
 int cnttrie(int i, int j, int m, string & s, vvi & trie){
-    if (i == m) return trie[j][27];
+    if (i == m) return trie[j][26];
     int k = int(s[i] - 'a');
-    if (!trie[j][k]) return ll(0);
+    if (!trie[j][k]) return 0;
     return cnttrie(i + 1, trie[j][k], m, s, trie);
 }
 
-// ll mx = 1e6, md = 1e9 + 7;
+
+void dfscyclebridge(int i, int p, int & ct, vi & c, vi & t, vi & l, vvi & gf){
+    t[i] = l[i] = ct++;
+    for (int j: gf[i]){
+        if (j != p){
+            if (!t[j]){
+                dfscyclebridge(j, i, ct, c, t, l, gf);
+                l[i] = min(l[i], l[j]);
+                if (l[j] <= t[i]) c[i] = c[j] = 1;
+                // else i j is a bridge
+            }else l[i] = min(l[i], t[j]);
+        }
+    }
+}
+
+// ll mx = 1e5, md = 998244353;
 // vl f(mx + 1, 1), invf(mx + 1, 1);
-// ll comb(ll a, ll b){
-//     return (f[a] * ((invf(b) * invf(a - b))%md))%md 
-// }
+
+void buildfac(ll & mx, ll & md, vl & f, vl & invf){
+    for (int i = 2; i <= mx; i++) f[i] = (f[i - 1] * i)%md;
+    invf[mx] = inv(f[mx], md);
+    for (int i = mx - 1; i; i--) invf[i] = ((i + 1) * invf[i + 1])%md;
+}
 
 void solve(){
     //
@@ -125,9 +143,8 @@ int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     int t = 1;
-    // for (int i = 2; i <= mx; i++) f[i] = (f[i - 1] * i)%md;
-    // invf[mx] = inv(f[mx], md);
-    // for (int i = mx - 1; i; i--) invf[i] = ((i + 1) * invf[i + 1])%md;
+    //buildfac(mx, md, f, invf);
     cin >> t;
     while (t--) solve();
 }
+
