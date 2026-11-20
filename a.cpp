@@ -159,10 +159,10 @@ void buildfac(ll & mx, ll & md, vl & f, vl & invf){
 
 void buildprimes(int & mx, vi & sv, vi & pm){
     sv[0] = sv[1] = 0;
-    for (int i = 2; i < mx; i++){
+    for (ll i = 2; i < mx; i++){
         if (sv[i]){
             pm.pb(i);
-            for (int j = i * i; j < mx; j += i) sv[j] = 0;
+            for (ll j = i * i; j < mx; j += i) sv[j] = 0;
         }
     }
 }
